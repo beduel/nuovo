@@ -20,7 +20,7 @@ jobs:
 
       - name: Extract Android project
         run: |
-          unzip -o AnyFlipAndroid_GitHubActions.zip -d .
+          unzip -o AnyFlipAndroid_GitHubActions_FIX.zip -d .
           test -f AnyFlipAndroid/settings.gradle
 
       - name: Setup Java
