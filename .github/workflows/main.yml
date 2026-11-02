@@ -29,23 +29,13 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      
       - name: Install Android SDK
         run: |
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.14.3'
-
-      - name: Build APK
-        working-directory: AnyFlipAndroid
-        run: gradle --no-daemon --stacktrace assembleDebug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: AnyFlip-Android-APK
-          path: AnyFlipAndroid/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            SDKMANAGER=$(find /usr/local/lib/android/sdk -name sdkmanager -type f | head -1)
+          fi
+          test -n "$SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+          "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0"
